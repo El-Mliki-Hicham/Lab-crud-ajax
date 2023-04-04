@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::resource('index', UserController::class);
+Route::post('index/update',[UserController::class,'updateUser'])->name("index.updateUser");
 

@@ -63,7 +63,12 @@
                                         </i>
                                         Afficher
                                     </a>
-                                    <a class="btn btn-info btn-sm" href="">
+                                    <a class="btn btn-info btn-sm updateBtn" id="myModal" data-toggle="modal"
+                                    data-target="#edit"
+                                    data-id="{{$value->id}}"
+                                    data-name="{{$value->name}}"
+                                    data-email="{{$value->email}}"
+                                     >
                                         <i class="fas fa-pencil-alt">
                                         </i>
                                         Modifier
@@ -136,12 +141,14 @@
 </div>
 {{-- end Model --}}
 @include("user.create")
+@include("user.edit")
 
 <!-- /.control-sidebar -->
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script>
 $(document).ready(function(){
 
+    //ajouter user
     $(document).on("click","#addUser",function(e){
         e.preventDefault();
 var nameInput =   $('#name').val();
@@ -171,9 +178,57 @@ var emailInput =   $('#email').val();
 
 })
 
-});
-//end search
 
+// afficher value user in form
+$(document).on("click",".updateBtn",function(){
+    let id = $(this).data('id');
+    let name = $(this).data('name');
+    let email = $(this).data('email');
+
+     $("#name").val(name)
+
+    $('#EditId').val(id);
+    $('#EditName').val(name);
+    $('#EditEmail').val(email);
+})
+
+
+
+
+ //ajouter user
+ $(document).on("click","#editUser",function(e){
+        e.preventDefault();
+var id =   $('#id').val();
+var nameInput =   $('#name').val();
+var emailInput =   $('#email').val();
+    console.log(emailInput + nameInput)
+
+    $.ajax({
+        url:"{{route('index.updateUser')}}",
+        method:"post",
+        data:{id:id,name:nameInput,email:emailInput},
+        success:function(res){
+            if(res.status=="success"){
+            $("#create").modal('hide');
+            //reset form
+            $(".formAdd")[0].reset();
+            //display data without page reload
+            $(".table").load(location.href+' .table');
+            }
+        },error:function(err){
+            let error= err.responseJSON;
+            $.each(error.errors, function(index, value){
+        $('.errMsg').append(value+"<br>");
+    })
+}
+    })
+
+
+})
+
+//end crud ajax
+
+});
     // model import
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').trigger('focus')
