@@ -43,20 +43,18 @@
                         <thead>
                             <tr>
                                 <th style="width: 100px">Id</th>
-                                <th style="width: 400px">Type handicap</th>
-                                <th>Description</th>
+                                <th style="width: 400px">Name</th>
+                                <th>Email</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($data as $value ) --}}
+                            @foreach ($user as $value )
 
                             <tr>
-                                {{-- <td>{{$value->id}}dd </td>
-                                <td>{{$value->nom}} </td>
-                                <td>{{$value->description}} </td> --}}
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{$value->id}} </td>
+                                <td>{{$value->name}} </td>
+                                <td>{{$value->email}} </td>
+
 
 
                                 <td class="project-actions text-right">
@@ -84,7 +82,7 @@
 
                                 </td>
                             </tr>
-                            {{-- @endforeach --}}
+                            @endforeach
 
 
                         </tbody>
@@ -143,57 +141,40 @@
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script>
 $(document).ready(function(){
-function fetch_data(page,query)
-{
-$.ajax({
- url:"/pagination/fetch_data?page="+page+"&query="+query,
- success:function(data)
- {
-  // console.log(data);
 
-  let table = "";
-  let pagination = "";
-  let html = data;
+    $(document).on("click","#addUser",function(e){
+        e.preventDefault();
+var nameInput =   $('#name').val();
+var emailInput =   $('#email').val();
+    // console.log(name + gmail)
 
-  let parts = html.split("<!--start-pagination--->");
-  table = parts[0];
-    pagination = parts[1];
-
-
-    console.log(pagination)
-    // console.log(pagination)
-    //   console.log(data)
-    //   console.log(data)
-    $('tbody').html('');
-    $('tbody').html(table);
-    $('.pagination').html(" ");
-    $('.pagination').html(pagination);
+    $.ajax({
+        url:"{{route('index.store')}}",
+        method:"post",
+        data:{name:nameInput,email:emailInput},
+        success:function(res){
+            if(res.status=="success"){
+            $("#create").modal('hide');
+            //reset form
+            $(".formAdd")[0].reset();
+            //display data without page reload
+            $(".table").load(location.href+' .table');
+            }
+        },error:function(err){
+            let error= err.responseJSON;
+            $.each(error.errors, function(index, value){
+        $('.errMsg').append(value+"<br>");
+    })
 }
+    })
+
+
 })
-}
-
-$(document).on('keyup', '#serach', function(){
-var query = $('#serach').val();
-var page = $('#hidden_page').val();
-fetch_data(page,query);
 
 });
+//end search
 
-
-$(document).on('click', '.pagination a', function(event){
-event.preventDefault();
-var page = $(this).attr('href').split('page=')[1];
-$('#hidden_page').val(page);
-var query = $('#serach').val();
-console.log(page);
-console.log(query);
-fetch_data(page,query);
-
-});
-});
-
-
-    // model
+    // model import
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').trigger('focus')
     })

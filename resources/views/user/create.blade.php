@@ -11,21 +11,21 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="" method="post"  enctype="multipart/form-data">
+            <div class="errMsg mb-1 p-md-3" style="color:red">
+                {{-- @error("type_handicap") --}}
+                {{-- {{$message}} --}}
+                {{-- @enderror --}}
+                </div>
+            <form action="" method="post" class="formAdd"  enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
                       <label for="exampleInputEmail1">User</label>
-                      <input type="text" class="form-control" value="" id="exampleInputEmail1" name="type_handicap">
-                      <div style="color:red">
-                          {{-- @error("type_handicap") --}}
-                          {{-- {{$message}} --}}
-                          {{-- @enderror --}}
-                          </div>
+                      <input type="text" class="form-control"  id="name" name="name">
                   </div>
                   <div class="form-group">
-                      <label for="exampleInputEmail1">Gmail</label>
-                      <input type="text" class="form-control" id="exampleInputEmail1"  name="Gmail" placeholder="Enter discription">
+                      <label for="exampleInputEmail1">Email</label>
+                      <input type="text" class="form-control" id="email" name="email" placeholder="Enter discription">
                       <div style="color:red">
 
                         </div>
@@ -39,7 +39,7 @@
                 <div class="card-footer">
                     <div class="d-flex">
                         <div class="p-2">
-                            <button type="submit" class="btn btn-primary">Enregistré</button>
+                            <button type="submit" id="addUser" class="btn btn-primary">Enregistré</button>
                         </div>
                       </div>
 
